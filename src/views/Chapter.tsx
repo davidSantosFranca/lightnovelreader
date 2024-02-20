@@ -4,7 +4,7 @@ import { useLoadChapter } from '../hooks/useLoadChapter';
 import { useScrollPosition } from '../hooks/useScrollPostion';
 export default function Chapter({name, series}:{name?:string, series:'tsukimichi'}) {
     const {chapter, loading} = useLoadChapter(name, series);
-    const{updateScrollPosition, chapterPosition} = useScrollPosition({loading, series, name});
+    const{updateScrollPosition, chapterPosition} = useScrollPosition({loading, name});
 
     useEffect(() => {
         if (loading) return;

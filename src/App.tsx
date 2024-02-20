@@ -1,7 +1,8 @@
 import './App.css'
 import Chapter from './views/Chapter'
-import { ChaptersDropdown } from './views/ChaptersDropdown';
+import { ChaptersDropdown } from './components/ChaptersDropdown';
 import { useCurrentChapter } from './hooks/useCurrentChapter';
+import SaveButton from './components/SaveButton';
 
 const series = "tsukimichi";
 
@@ -9,8 +10,11 @@ function App() {
   const {chapter, saveCurrent}=useCurrentChapter();
   return (
     <div id="app">
-      <ChaptersDropdown setCurrentChapter={(name)=>saveCurrent(name??"")} current={chapter.chapterTitle} series={series}/>
-      <Chapter name={chapter.chapterTitle} series={series}/>
+      <div>
+        <ChaptersDropdown setCurrentChapter={(name)=>saveCurrent(name??"")} current={chapter} series={series}/>
+        <SaveButton/>
+      </div>
+      <Chapter name={chapter} series={series}/>
     </div>
   )
 }

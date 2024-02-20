@@ -11,7 +11,8 @@ export const ChaptersDropdown = ({current, series, setCurrentChapter}:{current?:
     //dropdown for chapters
     return (
         <select id="dropdown" value={current} onChange={(e)=>{
-            setCurrentChapter(e.currentTarget.value)
+            setCurrentChapter(e.currentTarget.value);
+            document.title = e.currentTarget.value;
         }}>
             {data.map((chapter) => {
                 return <option key={chapter} value={chapter}>{chapter}</option>
