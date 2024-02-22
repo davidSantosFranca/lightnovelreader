@@ -1,23 +1,22 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-let target: string;
-if (process.env.NODE_ENV === "production") {
-  target = "https://lightnovelreaderserver.azurewebsites.net/api";
-} else {
-  target = "http://127.0.0.1:7071/api";
-}
+console.log(process.env.VITE_API);
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    cors: true,
-    port: 8080,
-    proxy: {
-      "/blobApi": {
-        followRedirects: true,
-        target: target,
-        rewrite: (path) => path.replace(/^\/blobApi/, ""),
+
+export default ({ mode }: { mode: string }) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd(), "") };
+  return defineConfig({
+    plugins: [react()],
+    server: {
+      cors: true,
+      port: 8080,
+      proxy: {
+        "/blobApi": {
+          followRedirects: true,
+          target: process.env.VITE_API,
+          rewrite: (path) => path.replace(/^\/blobApi/, ""),
+        },
       },
     },
-  },
-});
+  });
+};
