@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     cors: true,
+    port: 3000,
     proxy: {
       "/blobApi": {
         followRedirects: true,
