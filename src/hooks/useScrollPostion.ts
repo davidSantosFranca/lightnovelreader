@@ -1,4 +1,8 @@
 import { useMemo } from "react";
+import {
+  getChapterPosition,
+  setChapterPosition,
+} from "../utils/localStorageUtils";
 
 export const useScrollPosition = ({
   loading,
@@ -8,24 +12,21 @@ export const useScrollPosition = ({
   name?: string;
 }) => {
   const chapterPosition = useMemo(() => {
-    return loading || !name
-      ? 0
-      : parseFloat(localStorage.getItem(`${name}`) ?? "0");
-  }, [loading, name]);
+    return getChapterPosition(name ?? "scrollPosition");
+  }, [name]);
 
   const updateScrollPosition = (postion: number) => {
-    localStorage.setItem(`${name}`, postion.toString());
+    setChapterPosition(name ?? "scrollPosition", postion);
   };
   useMemo(() => {
     if (loading) return;
     //get position from local storage
-    const position = localStorage.getItem(`${name}`);
-    if (position) {
+    if (chapterPosition > 0) {
       const target = document.getElementById("chapter");
       if (!target) return;
-      target.scrollTop = target.scrollHeight * parseFloat(position);
+      target.scrollTop = target.scrollHeight * chapterPosition;
     }
-  }, [loading, name]);
+  }, [loading, chapterPosition]);
 
   return { updateScrollPosition, chapterPosition };
 };

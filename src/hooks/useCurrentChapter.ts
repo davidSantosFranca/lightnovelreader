@@ -1,13 +1,20 @@
 import { useMemo, useState } from "react";
-import { getCurrent, saveCurrent } from "../utils/currentChapter";
+import {
+  getChapterPosition,
+  getCurrentChapter,
+  setCurrentChapter,
+} from "../utils/localStorageUtils";
 
 export const useCurrentChapter = () => {
-  const [chapter, setChapter] = useState(getCurrent() ?? "");
+  const [chapter, setChapter] = useState(getCurrentChapter() ?? ["", 0]);
   useMemo(() => {
-    saveCurrent(chapter);
+    setCurrentChapter(chapter[0]);
+    document.title = `${chapter[0]}`;
   }, [chapter]);
   return {
     chapter: chapter,
-    saveCurrent: setChapter,
+    saveCurrent: (name: string) => {
+      setChapter([name, getChapterPosition(name)]);
+    },
   };
 };

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CurrentStateGet } from "../types/State";
+import { CurrentState } from "../types/State";
 
 // Define a service using a base URL and expected endpoints
 export const blobStorageApi = createApi({
@@ -9,19 +9,11 @@ export const blobStorageApi = createApi({
   }),
   tagTypes: ["CurrentState"],
   endpoints: (builder) => ({
-    getCurrentState: builder.query<CurrentStateGet, void>({
-      query: () => `current?key=DavidSantos995sf**`,
+    getCurrentState: builder.query<CurrentState, void>({
+      query: () => `status?key=DavidSantos995sf**`,
       providesTags: ["CurrentState"],
     }),
-    getChapterStatus: builder.query<CurrentStateGet, string>({
-      query: (chapterTitle) =>
-        `status?key=DavidSantos995sf**&chapterTitle=${chapterTitle}`,
-      providesTags: (s) => {
-        if (!s) return ["CurrentState"];
-        return [{ type: "CurrentState", key: s.chapterTitle }];
-      },
-    }),
-    postStatus: builder.mutation<void, CurrentStateGet>({
+    postStatus: builder.mutation<void, CurrentState>({
       query: (body) => ({
         url: `status`,
         method: "POST",
@@ -30,18 +22,11 @@ export const blobStorageApi = createApi({
           key: "DavidSantos995sf**",
         },
       }),
-      invalidatesTags: (_a, _b, c) => {
-        if (!c) return ["CurrentState"];
-        return [{ type: "CurrentState", key: c.chapterTitle }];
-      },
     }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {
-  useGetChapterStatusQuery,
-  useGetCurrentStateQuery,
-  usePostStatusMutation,
-} = blobStorageApi;
+export const { useGetCurrentStateQuery, usePostStatusMutation } =
+  blobStorageApi;

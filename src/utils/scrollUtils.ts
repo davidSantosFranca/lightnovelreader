@@ -1,4 +1,4 @@
-const localStorage = window.localStorage;
+import { getChapterPosition, setChapterPosition } from "./localStorageUtils";
 
 function getScrollPosition() {
   const scrollX = window.scrollX;
@@ -7,11 +7,11 @@ function getScrollPosition() {
 }
 
 // save the current scroll position to local storage considering the % to the full height of the scroll
-function saveScrollPosition() {
+function saveScrollPosition(name?: string) {
   const { scrollY } = getScrollPosition();
   const scrollHeight = document.documentElement.scrollHeight;
   const scrollPosition = scrollY / scrollHeight;
-  localStorage.setItem("scrollPosition", scrollPosition.toString());
+  setChapterPosition(name ?? "scrollPosition", scrollPosition);
 }
 
 function getRelativeScrollPosition() {
@@ -21,32 +21,10 @@ function getRelativeScrollPosition() {
 }
 
 // restore the scroll position from local storage
-function restoreScrollPosition() {
-  const scrollPosition = Number(localStorage.getItem("scrollPosition"));
+function restoreScrollPosition(chapter?: string) {
+  const scrollPosition = getChapterPosition(chapter ?? "scrollPosition");
   const scrollHeight = document.documentElement.scrollHeight;
   window.scrollTo(0, scrollPosition * scrollHeight);
 }
 
-// reset the scroll position to the top of the page on local storage
-function resetScrollPosition() {
-  localStorage.setItem("scrollPosition", "0");
-}
-
-// add a listener to the window to save the scroll position on every scroll event
-function addScrollListener() {
-  window.addEventListener("scroll", saveScrollPosition);
-}
-
-// go to scroll position on page load
-function goToScrollPosition() {
-  restoreScrollPosition();
-}
-
-export {
-  getRelativeScrollPosition,
-  saveScrollPosition,
-  restoreScrollPosition,
-  resetScrollPosition,
-  addScrollListener,
-  goToScrollPosition,
-};
+export { getRelativeScrollPosition, saveScrollPosition, restoreScrollPosition };
